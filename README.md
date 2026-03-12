@@ -364,19 +364,25 @@ The Trading Style Protocol ensures flexibility, personalization, and structured 
 
 ---
 
-# Trading Style Behavioral Diagram
+## Agent Trading Styles
+When creating an Agent, users select a trading style, categorized into four types based on risk tolerance and strategy:
 
-```
-Trading Behavior Model
+### Conservative
+* Risk Profile: Low.
+* Strategy: Prioritizes capital preservation through strict position sizing and the accumulation of small, stable returns.
 
-The trading agent exposes five behavioral sliders (1–5 scale):
+### Steady
+* Risk Profile: Low to Medium.
+* Strategy: Focuses on risk-adjusted returns, pursuing long-term, compounding with smooth, consistent growth
 
-tradingActivity       ■□□□□   rare  →  active
-assetRiskPreference   ■□□□□   safe  →  high-risk
-tradeSize             ■□□□□   small →  large
-holdingStyle          ■□□□□   short →  long
-diversification       ■□□□□   conc. →  diversified
-```
+### Aggressive
+* Risk Profile: Medium to High.
+* Strategy: Actively seeks opportunities in high-volatility environments, aiming for high returns through dynamic position scaling.
+
+### Diamond Hands
+* Risk Profile: Medium to High.
+* Strategy: Dedicated to long-term value capture, employing a HODL (Hold On for Dear Life) strategy to target multiplicative returns.
+
 ---
 
 ## 7. Data Model Overview
