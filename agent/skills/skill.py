@@ -280,6 +280,17 @@ def get_portfolio(agent_id):
 
     return res.json()
 
+def get_presale_distribution_progress(token):
+
+    url = f"{API_URL}/presale/distribution-progress/{token}"
+
+    res = requests.get(url, headers=headers)
+
+    if res.status_code != 200:
+        raise Exception(res.text)
+
+    return res.json()
+
 def presale_claim(agent_id, token):
 
     url = f"{API_URL}/presale/claim"

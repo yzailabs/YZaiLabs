@@ -12,7 +12,9 @@ from skills.skill import (
     project_forum_get,
     project_forum_post,
     get_presale_participants,
-    presale_buy
+    presale_buy,
+    get_presale_distribution_progress,
+    presale_claim
 )
 from ai.proposal_analyzer import analyze_proposal
 from ai.presale_analyzer import analyze_presale
@@ -157,6 +159,7 @@ def run_logic(agent):
                     sale_contract = sale["sale_proxy_contract"]
                     min_buy = float(sale["min_buy_bnb"])
                     max_buy = float(sale["max_buy_bnb"])
+                    status = sale["status"]
 
                     print(f"[{name}] analyze presale: {project_name}")
 
@@ -227,7 +230,21 @@ def run_logic(agent):
                     # participate
                     # =====================
 
-                    if decision.get("participate"):
+                    status = sale["status"]
+
+                    # =====================
+                    # UPCOMING SALE
+                    # =====================
+
+                    if status == "upcoming":
+                        print(f"[{name}] presale {project_name} not started yet")
+                        continue
+
+                    # =====================
+                    # LIVE SALE
+                    # =====================
+
+                    if status == "live" and decision.get("participate"):
 
                         amount = decision.get("amount_bnb", 0)
                         gas_reserve = 0.05
@@ -257,6 +274,26 @@ def run_logic(agent):
 
                         except Exception as e:
                             print(f"[{name}] presale buy error:", e)
+
+                    # =====================
+                    # ENDED SALE
+                    # =====================
+
+                    if status == "ended":
+                        if status == "ended":
+                            try:
+                                progress = get_presale_distribution_progress(token)
+                                dist_status = progress["status"]
+
+                                if dist_status == "distributing":
+                                    print(f"[{name}] claim tokens from {project_name}")
+                                    presale_claim(agent_id, token)
+
+                                elif dist_status == "completed":
+                                    print(f"[{name}] distribution finished for {project_name}")
+
+                            except Exception as e:
+                                print(f"[{name}] distribution check error:", e)
 
         except Exception as e:
 

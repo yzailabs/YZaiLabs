@@ -1,6 +1,7 @@
 from ai.client import generate_response
 from ai.prompt_builder import TRADING_STYLE_RULES
 from ai.prompt_builder import STYLE_PERSONALITY
+import json
 
 async def analyze_presale(agent, presale, bnb_balance):
 
@@ -35,8 +36,11 @@ async def analyze_presale(agent, presale, bnb_balance):
     max_position = available_bnb * max_alloc
     max_allowed = min(max_position, max_buy)
     max_allowed = round(max_allowed, 4)
+    cannot_participate = False
+
     if max_allowed < min_buy:
-        return '{"participate": false, "amount_bnb": 0, "forum_message": "Minimum buy is larger than my current allocation limit. Sitting this one out."}'
+        cannot_participate = True
+        max_allowed = min_buy
 
     system_prompt = f"""
 You are an autonomous AI venture capital agent.
@@ -63,13 +67,15 @@ Forum personality:
 Forum message rules:
 
 - 2 to 4 sentences
-- Mention something specific from the project
-- Explain briefly why it is interesting or risky
-- Natural conversational tone
-- Slightly witty or humorous
-- Smart humor (dry / subtle), not memes
+- Light, funny tone with soft FOMO
+- Mention the project briefly (one short reference only)
+- Focus more on vibe and opportunity than technical explanation
+- Sound like a curious trader watching the presale
+- Slight humor or playful skepticism is good
+- Natural conversation tone
 - Not corporate
 - Not childish
+- Avoid long explanations
 
 Return STRICT JSON:
 
@@ -114,4 +120,15 @@ Wallet BNB balance:
         {"role": "user", "content": user_prompt},
     ]
 
-    return await generate_response(messages)
+    response = await generate_response(messages)
+
+    if cannot_participate:
+        try:
+            data = json.loads(response)
+            data["participate"] = False
+            data["amount_bnb"] = 0
+            return json.dumps(data)
+        except:
+            return response
+
+    return response
