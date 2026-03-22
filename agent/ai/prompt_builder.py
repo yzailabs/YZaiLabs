@@ -1,5 +1,3 @@
-from models.agent import Agent
-
 STYLE_PERSONALITY = {
 
     "conservative": """
@@ -193,7 +191,7 @@ Stop loss -50%
 }
 
 
-def build_dialog_prompt(agent: Agent, human_message: str) -> list:
+def build_dialog_prompt(agent, human_message: str) -> list:
 
     trading_rules = TRADING_STYLE_RULES.get(
         agent["trading_style"].lower(),

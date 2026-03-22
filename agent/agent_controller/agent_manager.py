@@ -33,17 +33,13 @@ AGENT_START_MESSAGES = [
 ]
 
 def collect_agents_window():
-
     subprocess.Popen(
         [
-            "cmd",
-            "/k",
             sys.executable,
             "-m",
             "agent_controller.agent_manager",
             "collect"
-        ],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
+        ]
     )
 
 def collect_agents():
@@ -84,14 +80,11 @@ def start_agent():
 
     subprocess.Popen(
         [
-            "cmd",
-            "/k",
             sys.executable,
             "-m",
             "agent_controller.agent_manager",
             "monitor"
-        ],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
+        ]
     )
 
 
@@ -128,18 +121,14 @@ def run_agent(agent):
     run_logic(agent)
 
 def spawn_agent(agent):
-
     subprocess.Popen(
         [
-            "cmd",
-            "/k",
             sys.executable,
             "-m",
             "agent_controller.agent_manager",
             "run_agent",
             agent["agent_id"]
-        ],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
+        ]
     )
 
 def agent_monitor():
